@@ -11,11 +11,10 @@ private:
     Camera2D camera;
     i32 RenderHeight = 180;
     i32 RenderWidth = 320;
-
     World world;
 
     void Init();
-    void Update(float deltaTime);
+    void Update();
     void Draw();
 public:
     void Run();

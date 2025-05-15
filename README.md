@@ -1,6 +1,6 @@
 # A ZELDALIKE GAME
 
-## this is a small project i am working on,
+this is a small project i am working on,
 
 ## how to build:
     > mkdir out

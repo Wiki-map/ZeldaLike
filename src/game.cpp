@@ -3,8 +3,8 @@
 #include "rlImGui.h"
 
 void Game::Init() {
-    //SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(RenderWidth*6, RenderHeight*6,"hi");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(800, 800,"hi");
     SetTargetFPS(60);
 
     player = Player(300,300);
@@ -15,8 +15,14 @@ void Game::Init() {
     world.Load(RESOURCE_PATH "world.ldtk");
 }
 
-static void CameraUpdate(Camera2D &camera,Rectangle target,i32 RenderWidth) {
-    f32 zoom = (f32)GetScreenWidth()/(f32)RenderWidth;
+static void CameraUpdate(Camera2D &camera,Rectangle target,i32 RenderHeight,i32 RenderWidth) {
+    f32 zoom;
+    if (GetScreenHeight() > GetScreenWidth()) {
+        zoom = (f32)GetScreenHeight()/(f32)RenderHeight;
+    }
+    else {
+        zoom = (f32)GetScreenWidth()/(f32)RenderWidth;
+    }
     camera.zoom = zoom;
 
     camera.target.x = (f32)target.x + (f32)target.width/2;
@@ -26,9 +32,13 @@ static void CameraUpdate(Camera2D &camera,Rectangle target,i32 RenderWidth) {
     camera.offset.y = (f32)GetScreenHeight()/2;
 }
 
-void Game::Update(float deltaTime) {
+void Game::Update() {
+    if (IsKeyPressed(KEY_F11)) {
+        SetWindowSize(GetMonitorWidth(0),GetMonitorHeight(0));
+        ToggleFullscreen();
+    }
     player.Update();
-    CameraUpdate(camera,player.GetRectangle(),RenderWidth);
+    CameraUpdate(camera,player.GetRectangle(),RenderHeight,RenderWidth);
 }
 
 void Game::Draw() {
@@ -51,7 +61,7 @@ void Game::Draw() {
 void Game::Run() {
     Init();
     while (!WindowShouldClose()) {
-        Update(GetFrameTime());
+        Update();
         BeginDrawing();
         Draw();
         EndDrawing();
